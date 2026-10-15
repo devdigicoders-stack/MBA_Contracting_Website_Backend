@@ -1,0 +1,20 @@
+# Server dependencies
+node_modules/
+
+# Environment files
+.env
+!.env.example
+.env.local
+.env.*.local
+*.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS and Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
