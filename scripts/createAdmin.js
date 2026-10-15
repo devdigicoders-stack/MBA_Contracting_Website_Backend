@@ -6,9 +6,14 @@
  *   node scripts/createAdmin.js admin admin@greengateadvisory.com SecurePass123!
  */
 
+import dns from 'node:dns';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import Admin from '../models/Admin.js';
+
+try {
+  dns.setServers(['8.8.8.8', '8.8.4.4']);
+} catch (e) {}
 
 dotenv.config();
 

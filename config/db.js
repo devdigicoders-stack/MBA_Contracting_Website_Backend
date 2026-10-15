@@ -1,4 +1,12 @@
+import dns from 'node:dns';
 import mongoose from 'mongoose';
+
+// Fix for Node.js querySrv ECONNREFUSED on local ISP DNS resolvers
+try {
+  dns.setServers(['8.8.8.8', '8.8.4.4']);
+} catch (e) {
+  // Ignore in environments where setServers is restricted
+}
 
 /**
  * Connect to MongoDB database with graceful fallback
