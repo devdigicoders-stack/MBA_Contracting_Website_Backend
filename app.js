@@ -16,14 +16,17 @@ app.use(helmet());
 app.use(cookieParser(process.env.SESSION_SECRET || 'green-gate-advisory-cookie-secret'));
 
 // CORS Configuration - allows configured origins or local development ports
-const rawOrigins = process.env.CLIENT_ORIGINS || process.env.CLIENT_URL || 'http://localhost:5173,http://localhost:5174';
-const allowedOrigins = rawOrigins.split(',').map(o => o.trim());
+const rawOrigins = process.env.CLIENT_ORIGINS || process.env.CLIENT_URL || 'http://localhost:5173,http://localhost:5174,https://green-gate-advisory.vercel.app';
+const allowedOrigins = rawOrigins.split(',').map(o => o.trim().replace(/\/+$/, ''));
 
 app.use(cors({
   origin: (origin, callback) => {
     const isDev = process.env.NODE_ENV !== 'production';
     const isLocalhost = isDev && (!origin || origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:'));
-    if (!origin || allowedOrigins.includes(origin) || isLocalhost) {
+    const normalizedOrigin = origin ? origin.replace(/\/+$/, '') : '';
+    const isVercel = normalizedOrigin.endsWith('.vercel.app');
+
+    if (!origin || allowedOrigins.includes(normalizedOrigin) || isLocalhost || isVercel) {
       callback(null, true);
     } else {
       callback(new Error(`CORS blocked request from origin: ${origin}`));
